@@ -1,0 +1,789 @@
+UNIT 1
+INTRODUCTION TO NEURAL NETWORKS
+AND DEEP LEARNING
+STUDY GOALS
+After completing this unit you will be able to ...
+– describe what neurons in the brain are.
+– explain how neurons process information in a simple picture.
+– understand what the receptive field is.
+– recall how perceptrons were developed as the first artificial models of biological neurons.
+– explain the relevance of multi-layer perceptrons as the precursors to modern artificial
+neural networks and deep learning architectures.
+1. INTRODUCTION TO NEURAL NETWORKS
+AND DEEP LEARNING
+Introduction
+Neural networks and deep learning have seen tremendous successes in recent years and
+are at the core of the current technological revolution in data science and articial intelligence.
+Success stories are heard from all sectors and areas, both in research and industrial
+applications. Most of the “smart technologies”, such as digital assistants like Google Assistant,
+Apple’s Siri, and Amazon’s Alexa, use deep learning approaches, and autonomous
+vehicles would not be possible without advanced neural networks. In many cases, technologies
+developed using deep learning techniques already reach human-level performance
+in the respective task. For example, in medicine researchers used retinal images to
+predict cardiovascular risk factors (Poplin et al., 2018), classify skin cancer on the same
+level as human dermatologists (Esteva et al., 2017), and even take the first steps in mindreading
+by constructing images from human brain activity (Shen et al., 2019). In the field
+of material science, researchers can use deep learning to automate the analysis of damage
+sites in a material and further the understanding of the underlying mechanisms and properties
+(Kusche et al., 2019). There are many examples of neural networks and deep learning
+technologies that have a direct impact on our lives. For example, these technologies
+can identify persons in surveillance or CCTV cameras (Hill, 2020) and assessing prison sentences
+in the judiciary system (Israni, 2017).
+What are neural networks, and what is deep learning? The origins of neural networks go
+back to 1943, when McCulloch and Pitts (1943) posited that neural activity can be described
+by logic. Rosenblatt (1958; 1961) developed the perceptron, and the first networks
+with multiple layers were created by Ivakhnenko et al. (1966). Further details can be found
+in the literature of Schmidhuber (2015). The term “deep learning” is not as easily defined.
+Until the late 2010s, neural networks consisted mainly of a few layers of artificial neurons.
+The boost in computing technology (in particular, the development of powerful graphic
+cards) allowed for the training of large networks with many neurons organized in numerous
+intermediate layers. For some, deep learning is simply the contrast of these complex
+neural networks compared to the “shallow” networks used before. However, Yann LeCun
+(2020), one of the prominent figures in deep learning, recently said that deep learning “is
+an architectural language with enormous flexibility”, and he stresses the advantage of the
+flexibility provided by recently-developed toolkits.
+In this unit, we will take a closer look at what has inspired and enabled the dramatic technological
+developments leading to these and many other successes. We will first take a
+closer look at the human brain, which is able to perform many very complex tasks and
+often serves as an inspiration and benchmark in the development of technological solutions.
+Then, we will investigate the historical origins of the development of neural networks,
+focusing on the development of perceptions in particular.
+16
+1.1 The Biological Brain
+The Anatomy of the Brain
+The human brain is arguably the most complex organ we posses, and, together with the
+spinal cord, makes up the nervous system. The following figure shows a schematic overview
+of the brain, which is located in the human skull and protected by a thick layer of
+bones. The main function of the brain is to control the activities of the body, as well as
+receive and process information we receive from our sensory organs (eyes, skin, etc.). The
+brain also sends instructions to the rest of the body, either as a reaction (e.g., when we
+touch a hot oven), or as a result of deliberate considerations (e.g., when we want to walk
+somewhere or grab an object).
+Figure 1: Schematic Overview of the Human Brain
+Source: Kerzel (2020).
+17
+The brain is divided into several sections, the main ones being the cerebrum, brainstem,
+and cerebellum. The cerebrum is the largest part of the brain in humans and is further
+divided into two cerebral hemispheres, each of which is typically divided into four lobes:
+frontal, temporal, parietal, and occipital. The frontal lobe is mainly associated with
+abstract functions such as planning, reasoning, and abstract thought, and the occipital
+lobe is mainly associated with processing visual information. There are substantial differences
+in the brains of women and men; for example, the typical weight of the male brain is
+between 1.180 and 1.620 kg (Molina & DiMaio, 2012), while the female brain weighs
+between 1.030 and 1.400 kg (Molina & DiMaio, 2015). However, neurological differences
+between the male and female brains have not been shown to have an influence on measures
+of cognitive performance, e.g., intelligence quotient (IQ) (Gur et al., 1999).
+Figure 2: Schematic Overview of a Neuron
+Source: LadyofHats (2007). Public domain.
+On a microanatomical level, the human brain consists of approximately 86.1 ± 8.1 billion
+neurons supported or “glued together” by a large number of glial cells (Azevedo et al.,
+2009). The figure above shows a schematic overview of a nerve cell or neuron. We can distinguish
+two main parts: a central body called the soma and “wires” that radiate away
+from the central cell body. These are called neurites and can be further distinguished into
+axons and dendrites. The axons carry the output of the neuron and form the synapse at
+their end to connect to other neurons. In many cases, the end of the axon branches out
+into a terminal arbor, where the axon connects to many other neurons via synapses. In
+most cases, the electrical signal passed along the axon is not directly transmitted to other
+neurons. Instead, the synapse and the neuron it connects to are separated by a small gap.
+18
+The electrical signal is converted into a chemical signal that transverses this gap, i.e., the
+electrical signal indicates the release of chemicals called neurotransmitters that convey
+information from one neuron to the next. The dendrites, on the other hand, are akin to
+“antennae” of the neurons and are covered in many synapses. Here, specialized molecules
+act as receptors for the neurotransmitters released by other neurons via their axon. Since
+each neuron has a large number of dendrites, and each dendrite is covered in thousands
+of synapses, each neuron can receive signals from many other neurons. In the figure
+below, we can see a very simplified picture depicting a single neuron with connections to
+other neurons.
+Figure 3: Simplified Overview of a Neuron
+Source: OpenClipart-Vectors (2016). Pixabay license.
+Each neuron is connected to thousands of other neurons and receives stimuli or inputs
+from all these neurons. The mechanism by which these inputs lead to an output is a crucial
+detail in understanding how neurons work. Neurons at rest do not propagate an output
+signal along the axon towards other neurons. In this state, the inside of the neuron is
+negatively polarized at around –70 mV with regard to a place outside the cell. In order to
+produce a signal, a threshold needs to be crossed by a stimulus, which leads to rapid
+depolarization of the cell structure. The resulting action potential then leads to generation
+of the output signal by a neuron (as seen in the figure below). Once the action potential is
+triggered, the output signal of a specific neuron travels along the axon and is passed to
+other neurons via neurotransmitters. After this output is sent, the neuron enters a brief
+refractory period during which the neuron cannot be stimulated again to send an output
+signal before it returns to its resting state.
+How is this action potential triggered? Signals between neurons are transmitted chemically
+via neurotransmitters rather than directly as electrical signals. Each neurotransmitter
+is received by specific receptors at the end of the synaptic gap, and the reception of such a
+19
+neurotransmitter changes the local chemical structure of the neuron, which in turn
+changes the local electrical potential of the neuron cell. These effects can be either excitatory
+(i.e., working towards the triggering of an action potential) or inhibitory (i.e., countering
+the triggering of an action potential). Typically, the effect of the reception of a neurotransmitter
+decreases exponentially both with distance and time with respect to the
+synapse where the neurotransmitter was received. In order for the threshold of the action
+potential to be crossed, multiple excitatory signals must work together at approximately
+the same time in order to trigger an output of a specific neuron, overcoming the effects of
+any inhibitory signals by other neurotransmitters. Hence, the output of a single neuron is
+determined by a complex pattern of the signals received by the other neurons to which a
+specific neuron is connected.
+Figure 4: Action Potential of a Neuron
+Source: OpenWetWare Team (2021). CC BY-SA.
+This pattern forms the basis of all processes in the brain. Crucially, memories and
+thoughts are not stored genetically inside a neuron as part of the DNA. Instead, memories
+and thoughts arise as the result of a complex interplay of connected neurons and the way
+they pass signals between them. This fundamental principle serves as an inspiration for
+20
+how to build complex artificial neurons and networks of artificial neurons. This is only a
+very coarse description; a more detailed discussion can be found in textbooks on neuroscience
+such as the literature of Bear et al. (2007).
+The Receptive Field and Visual Cortex
+A large part of our sensory input is visual information. Information about light recorded on
+the retina of our eye is transported by the optic nerve to the visual cortex at the back of
+the brain (see the figure below).
+Figure 5: The Human Visual Cortex
+Source: Kerzel (2020), based on Database Center for Life Science (2012).
+Both hemispheres of the brain contain a visual cortex; however, the information from the
+left eye is processed in the right hemisphere, and the information from the right eye in the
+left hemisphere. If a stimulus is received in the receptive field, the action potential of the
+corresponding neurons is triggered and the neurons produce an output signal. According
+to Levine and Shefner (1991), the receptive field is defined as the area where stimulation
+21
+yields a specific sensory neuron response. The visual cortex is a dedicated area of the
+brain that specializes in processing information received from the eyes about static and
+moving objects. When an object enters the receptive field, the corresponding neurons
+“fire”, (i.e., the action potential is triggered) and the neuron produces an output. Static and
+moving images generally produce different output signals, and even the direction from
+which an object enters the receptive field and transverses it can result in different responses
+(Bear et al., 2007).
+In order to measure the receptive field of the visual system, researchers typically use an
+animal which is fixated in an experimental setup and anesthetized. It is important that the
+animal does not move during the experiment so they can map a visual signal to the
+response of the neurons. This response is measured by inserting a thin electrode into the
+visual cortex of the animal and measuring the change in electrical activity when a signal is
+shown (as in the following figure). The left side of the figure shows the setup of the experiment
+when no visual stimulus is shown, with the eye representing the animal in the
+experiment. On the right side, the projector transmits a signal to the black screen, and the
+reaction of the neurons in the visual cortex is recorded. Using different types of signals,
+the scientists can then determine the size of the receptive field, the response of the neurons
+to static or moving patterns, and the sensitivity to the direction in which the visual
+stimulus is projected. These experiments were pioneered by Kuffler (1953), Hubel (1959),
+and Hubel and Wiesel (1959; 1962; 1968).
+Figure 6: Determination of the Receptive Field (Left: Setup with No Signal; Right:
+Projecting a Visual Sign onto a Screen)
+Source: Kerzel (2020).
+22
+1.2 Perceptron and Multi-Layer
+Perceptrons
+The perceptron is the earliest algorithm related to the development of artificial neural networks.
+It was developed by Rosenblatt (1957), building on earlier work by McCulloch and
+Pitts (1943). The original perceptron is a linear binary classifier, deciding whether an event
+belongs to a specific class. Originally, the perceptron was intended to be a machine rather
+than an algorithm, which led to the development of the “Mark 1 Perceptron” designed for
+image recognition. This is made up of 400 photocells connected to artificial neurons. Rosenblatt
+(1961) stated that, for him, “the perceptron program is not primarily concerned with
+the invention of devices for ‘artificial intelligence’, but rather with investigating the physical
+structures and neurodynamic principles which underlie ‘natural intelligence’. A perceptron
+is first and foremost a brain model, not an invention for pattern recognition” (Rosenblatt,
+1961).
+From a modern perspective we can define the perceptron model as a linear binary classifier
+as a function for which
+! " = 1if# · " + $ > 0
+0 ! otherwise
+where " are the input data; # are the free parameters which are adjusted during the
+learning process such that the predictions made by the algorithm correctly reproduce the
+values observed in the data; and $ is some threshold value. Following the discussion
+about the (simplified) structure of a single neuron, the above description of the perceptron
+can be seen as an artificial neuron that follows the same underlying principles illustrated
+in the figure below. In both cases, the input is received and processed in the main
+cell body. In the case of the natural neuron, an output signal is created if the excitatory
+and inhibitory inputs exceed a threshold and an action potential is released; in the case of
+the perceptron, the input is directly received from the “outside world”, and an output is
+created if the weighted sum of the inputs exceeds some threshold value.
+23
+(1.1)
+XOR
+This is a logic gate which
+gives a signal (1) when
+the number of inputs is
+odd.
+Figure 7: Biological Neuron and Perceptron
+Source: Kerzel (2020), based on OpenClipart-Vectors (2017).
+The perceptron algorithm is trained in the following way using a training sample of known
+classes and input values " . Initially, the weights # and the threshold $ are set to zero or
+small random values. Then the following procedure is iterated:
+• Using the training data, the output corresponding to the current values of weights #
+and threshold $ is calculated at training step %.
+• The weights are changed according to #& % + 1 = #& % + ' () − +) % "&, ), where ' is
+the learning rate; #& are the weights; () is the desired or true output corresponding to
+the training event " );+) % is the current output calculated from the weights; and "&, )
+are the elements of the input vector for training event ).
+The above procedure is repeated until the discrepancy between the calculated and
+desired (true) 1
+, -
+) = 1
+,
+() − +) % falls below a specified level.
+Despite initial promising successes, it became quickly apparent that the perceptron could
+not be used in many classification tasks, causing the field to stagnate for many years. Minsky
+and Papert (1969) showed that many logical functions, in particular the XOR gate, cannot
+be implemented in a single perceptron. Historically, the book caused many controversies
+which contributed to a decline in funding and research in the field. It was often
+(incorrectly) assumed that the authors of the book were implying that, because a single
+perceptron cannot reproduce many logic functions and is hence very limited in its application,
+the same would hold for networks of perceptrons. It took years before it was realized
+that multi-layer perceptrons (MLPs) were able to solve classification problems that a single
+perceptron could not handle. MLPs are organized as layers of perceptrons (as shown in
+the following figure). The first layer is called the input layer and receives the input from
+the outside world. This is followed by an intermediate or hidden layer, where each perceptron
+in the input layer has a connection to each perceptron in the hidden layer. The hidden
+layer is then connected to one or more perceptrons in the output layer.
+24
+Figure 8: Multi-Layer Perceptron
+Source: Kerzel (2020).
+In its original form, each perceptron in the MLP is the same linear model with a single
+threshold, as used in the perceptron model discussed earlier. However, the term MLP later
+included models in which this threshold was replaced by a non-linear activation function.
+These multi-layer perceptrons evolved into the first feed-forward networks by which most
+of the modern neural network and deep learning architectures have been influenced.
+SUMMARY
+In this unit, we explored the origins and motivations that have led to the
+development of artificial neural networks. The underlying principle is
+inspired by a simplified model of how neurons are organized and connected
+in the brain: Each neuron receives input from many other neurons,
+and if these signals exceed a certain threshold, an action potential
+is released and the neuron produces an output signal that is transmitted
+to other neurons.
+The perceptron developed by Rosenblatt (1957) is a simple model of
+such a neuron, originally developed as a linear classifier for image recognition.
+In later years, perceptrons were organized into several layers, and
+these multi-layer perceptrons (MLPs) were the precursor to the artificial
+neural networks used in today's applications.
+25
+
+UNIT 2
+NETWORK ARCHITECTURES
+STUDY GOALS
+After completing this unit you will be able to ...
+– identify the most important neural network architectures.
+– explain what feed-forward, convolutional, and recurrent networks are.
+– describe why convolutional neural networks are ideal for image analysis.
+– use recurrent neural networks to encode long sequences of events.
+2. NETWORK ARCHITECTURES
+Introduction
+Neural networks and deep learning are at the core of many technological successes ranging
+from medicine to autonomous driving. Our brain is capable of performing many different
+tasks, such as making calculations, processing and interpreting visual information,
+understanding and controlling speech, and controlling our muscles and limbs to operate
+machines or ride a bike. The brain is able to perform all these tasks with a single “architecture”.
+Fundamentally, the brain of each person follows the same generic anatomy. Neural
+networks can also excel at all of the tasks we can perform as a human; however, crucially,
+at the current state of the art, no single setup can perform all these tasks equally well.
+Developing such an architecture is one of the aims of the research in artificial general
+intelligence (AGI); however, it is rather unclear if and when such a system will be able to
+perform all tasks a small child can do. Instead, over the years dedicated neural network
+architectures have been developed that excel at specific tasks. There are many network
+architectures (as shown in the following figure) (Van Veen & Leijnen, 2019), and in this unit
+we focus on the three fundamental architectures found in many applications today: the
+feed-forward or fully-connected network, the convolutional neural network, and the
+recurrent neural network. The feed-forward neural network can be seen as a “general purpose”
+neural network and is mainly used for classification and regression. Dedicated networks
+can even reconstruct the full probability density distribution which contains all
+information about a regression prediction instead of just a single number or a number and
+some measure of the associated uncertainty (Feindt & Kerzel, 2006). Convolutional neural
+networks are mainly used in image processing, whereas recurrent neural networks are
+able to keep a “memory”, and are used in applications such as language understanding
+and generation, analysis of time-series data, and predicting the trajectory of moving
+objects.
+28
+Figure 9: The Neural Network Zoo
+Source: van Veen and Leijnen (2019). Used with permission.
+29
+2.1 Feed-Forward Networks
+Feed-forward networks can be seen as the “general purpose” neural networks and are
+mainly used for classification (i.e., deciding whether an input pattern belongs to one of
+two or more classes), and regression (i.e., the prediction of a number or a number with
+associated uncertainty or the full probability density function associated with the regression
+target).
+These types of networks are the evolution of the multi-layer perceptrons discussed earlier.
+The fundamental building blocks are the artificial neurons, which are inspired by a simple
+model of neurons in the brain.
+Figure 10: Biological (Left) and Artificial (Right) Neurons
+Source: Kerzel (2020), based on OpenClipart-Vectors (2017).
+Similar to the perceptron, this artificial neuron computes its output signal using a weighted
+sum of the input signals, where the weights #&) are specific to each neuron ) and indicate
+how strongly a specific input signal & should be taken into account. However, compared
+to the simple perceptron and the biological neuron, the output of the artificial
+neuron is not determined by a simple “all-or-nothing” action potential or threshold but by
+an activation function .. The output of the neuron is therefore given by
+/) " = . -&#&)"& :
+where " is the vector representing the input values "& to the artificial neurons; /) is the
+output of the specific neuron ); . denotes the activation function; and #&) are the weights
+connecting neuron & to neuron ). The weights are adjusted during the training of the artificial
+neurons. A wide range of activation functions can be used. In the case of the perceptron,
+the activation function is a simple threshold that can be mathematically represented
+by a step or Heaviside function. However, in more modern artificial neurons, a wide range
+of activation functions is used in different applications. Around the early 2000s, activation
+functions such as . " = tanh " were widely used; in recent applications, piece-wise linear
+functions are preferred. A key aspect of any choice of activation function is that it is
+30
+(2.1)
+non-linear. This non-linearity enables the network to learn more complex classification
+and regression tasks and is one of the major steps in the evolution from simple multi-layer
+perceptrons. A more detailed discussion on the choice of transfer function will follow
+when discussing the training of neural networks in detail.
+Feed-forward neural networks are built by arranging the above artificial neurons into layers,
+similar to multi-layer perceptrons
+Figure 11: Feed-Forward Network
+Source: Kerzel (2020).
+In the input layer, each neuron receives the input value "&, i.e., there is typically one input
+neuron per element of the vector " holding the data corresponding to a specific signal to
+be analyzed. In many cases, a bias node is added, which receives the constant input "$ = 1
+and acts as a further parameter that can adjust the thresholds and different numerical
+ranges of the other input variables. The output of the neuron then becomes
+/) " = . -&#&)"& + $
+where $ is the threshold related to the bias node. This can also be written in matrix notation
+as
+/ = . 0" + $
+where 0 is the weight matrix. In feed-forward networks, the weight matrix is given by
+31
+(2.2)
+(2.3)
+0 =
+#0, 0 #0, 1 #0, 2 …
+#1, 0 #1, 1 #1, 2 …
+#2, 0 #2, 1 #2, 2 …
+… … … …
+Following the input layer, one or more hidden or intermediate layers are added. Each artificial
+neuron in one layer is connected to each neuron in the preceding and following layer
+#&). Finally, all neurons in the last intermediate layer are connected to one or more output
+neurons in the output layer. Because each neuron is connected to all other neurons, these
+types of networks are also called fully connected, which implies that each element #&) in
+matrix 2.4 is different from zero.
+These types of networks are called feed-forward networks because the flow of information
+is strictly passed from the input layer to the intermediate layer and finally to the output
+layers: The input neurons receive the numerical values from the feature variables, the
+prediction is collected from the output neurons, and there are no feedback loops or recursions
+in between.
+2.2 Convolutional Neural Networks
+Convolutional neural networks are a special kind of neural network ideally suited to the
+processing and analysis of images. Before investigating why we choose these kind of networks,
+we ask ourselves why we cannot use feed-forward networks for image analysis
+tasks, since we introduced these as “general-purpose” networks. We remember that in
+feed-forward networks each neuron or node in the input layer is associated with a specific
+input signal, which is then transmitted to one or more intermediate layers, and all neurons
+are (fully) connected with all preceding or following neurons. If we want to choose, e.g., a
+500 × 500 pixel color image, we need already 500 × 500 × 3 = 750,000 input neurons
+where each pixel has three values (RGB) to describe its color. Allowing for some flexibility
+in the intermediate or hidden layer, we may want to use 10,000 nodes, which implies we
+have 7,500,000,000 fully-connected weights in the first two layers alone. Determining the
+best value of each of these weights will require a large number of images, and it is not
+difficult to imagine that the convergence of the training process will be slow at best and,
+more likely, not successful. Furthermore, such an approach would analyze the whole
+image in each hidden layer. This is because each node is connected to all nodes both in
+the upstream and the downstream layers of the neuron we consider. What would happen
+if we had several similar images that show the same object (e.g., the same dog) but from
+different angles, distances, or rotations? It is still the same dog and, essentially, the same
+image, but it would be difficult to find more general abstract descriptions if we had to analyze
+each pixel of the pictures in all layers of the network. Additionally, pixels that are far
+away from each other are unlikely to be closely related, as images can be quite big and
+show complex scenery. Finally, studies of the visual cortex of animals have shown that the
+brain does not process the image recorded by the eyes as a whole; rather, its receptive
+fields are more locally organized and respond differently to static or moving objects,
+32
+(2.4)
+where even the direction of movement can elicit different responses in the brain (see, e.g.,
+Hubel and Wiesel (1962)). We therefore aim to find a neural network architecture more
+suited to image analysis.
+Convolution and Image Processing
+In traditional image analysis, the convolution operator is frequently used to transform
+images or highlight specific features. The convolution is a mathematical operation that
+applies a function to each element of another function. In images, one “function” is the
+image consisting of a grid of ", + coordinates representing the pixels of the image. Each
+pixel is then modified by a kernel, resulting in a new image. Mathematically, this can be
+expressed as
+1* ! ", + = -
+& = − 1
+2
+-
+) = − $
+$
+1 &, ) ! " − &,+ − )
+where ! ", + is the original image and 1 the appropriate kernel. By choosing a suitable
+kernel, we can, e.g., sharpen or blur the image or detect certain features such as the edges
+of objects in the image. This is illustrated in the following figure, where the Sobel operator
+or kernel (Sobel, 2014) has been applied. This kernel consists of the two matrices. Applying
+these two matrices approximates the derivatives in "− and + − direction, and areas
+with rapid changes indicate edges in the image.
+1" =
+−1 0 +1
+−2 0 +2
+−1 0 +1
+1+ =
+−1 −2 −1
+0 0 0
++1 +2 +1
+33
+(2.5)
+(2.6)
+Figure 12: Edge Detection by Convolving with the Sobel Operator (Left: Original Image;
+Right: Convolved Image)
+Source: Willems (2018). Pexels license.
+Keeping the analogy of traditional image processing in mind, we can conclude that the
+convolution operator will be a valuable tool for analyzing images with neural networks.
+Unlike in traditional image processing, we do not specify the kernel in convolutional neural
+networks; the key idea is that the kernel is learned during the network training. This
+means that a convolutional layer in such a network will learn a specific filter representing
+a feature of the image.
+We have previously seen that the weight matrix for a fully-connected neural network is
+given by
+0 =
+#0, 0 #0, 1 #0, 2 …
+#1, 0 #1, 1 #1, 2 …
+#2, 0 #2, 1 #2, 2 …
+… … … …
+where each element #&) is different from zero. Since the kernel used in the convolution
+stays the same as it is moved across the image, the resulting weights in the convolutional
+neural network have a special structure. This is easily understood in the case of onedimensional
+convolutions (see the following figure). The input signal is, again, represented
+by "&. In the one-dimensional case, we do not use images but rather, for example,
+time-series data such as an audio signal or stock market prices. The kernel is represented
+by a blue square, and in this example, we use a simple kernel that only connects two adjacent
+signals "& and "& + 1. As the same convolutional kernel is moved across the signal, the
+weights #0 and #1 are applied repeatedly across the whole signal range "1, "2, …, "3.
+34
+Figure 13: Weight Sharing in One-Dimensional Convolutions
+Source: Kerzel (2020).
+This leads to a special weight structure when describing the output of the convolutional
+nodes mathematically:
+0 =
+#0, 0 #0, 1 #0, 2 …
+#1, 0 #1, 1 #1, 2 …
+#2, 0 #2, 1 #2, 2 …
+… … … …
+=
+#0 #1 0 0 0 …
+0 #0 #1 0 0 …
+0 0 #0 #1 0 …
+… … … … … …
+This structure, where the same weights are used repeatedly, is also called weight sharing.
+The same approach also holds more generally for two- and higher dimensional convolutions.
+This sharing of the weights allows for a drastic reduction in the number of weights
+needed in a convolutional layer compared to a fully-connected neural network layer.
+Stride and Padding
+When performing a convolution, the kernel is applied to the image. This is illustrated in
+the following figure, which shows a 3×3 kernel applied to the pixel in the second row and
+second column of the image. Taking the value of this image and all eight direct neighbors
+into account, the resulting value of the pixel is calculated.
+35
+Figure 14: Convolution: A Kernel (Blue) is Applied to the Pixel in the Second Row,
+Second Column of the Grid
+Source: Kerzel (2020).
+This process is then repeated to cover the pixels of the original image. The convolution
+kernel can be moved in one or more steps (see the following figure). This is called stride. A
+stride of one means that the kernel is moved one pixel in either "− or + − direction. If
+values larger than one are chosen for the stride, the convolutional kernel is moved more
+than one step each time. This implies that the resulting image will not have values in each
+new pixel, i.e., the resulting image will be down-sampled from the original image as fewer
+pixels of the original image contribute to the new image.
+Figure 15: Stride = 1 (Left: Original Position of the Convolution Kernel; Right: Kernel
+Moved One Step to the Right)
+Source: Kerzel (2020).
+Special care has to be taken when the convolutional kernel reaches the edges of the
+image, since the mathematical operation is no longer defined if the kernel is moved outside
+the image region. There are several approaches to deal with this situation. In the simplest
+case, the outermost range of pixels of the image is ignored: the kernel is moved
+towards the edges of the image, but no further. Hence, the outermost layers of pixels
+(depending on the size of the kernel) cannot be taken into account, and the resulting con-
+36
+volved image is smaller than the original image. While this may be acceptable, or even
+desired, in other cases the original dimensions of the image should be retained. In order to
+make the convolution operation valid on all original pixels, the image is extended such
+that zeros are added around the image as required to cover the convolutional kernel in all
+cases. This is illustrated in the following figure: The grid represents the original image. The
+convolutional kernel is now applied to the pixel in the first row and column. Without padding,
+this operation would not be valid. However, as we add zeros around the image
+(green area), the operation can be completed.
+Figure 16: Padding
+Source: Kerzel (2020).
+Pooling
+The convolutional layer(s) of a convolutional neural network allow(s) the learning of a specific
+filter that in turn represents specific features of an image. However, one of the challenges
+of the output of convolutional layers is that they are sensitive to the precise location
+of the feature in the image. This implies that small displacements, rotations, or
+cropping of the input image will result in quite different outputs of the convolutional layer,
+even if the image is essentially the same. Typically, similar issues in signal processing are
+addressed by downsampling, i.e., a lower resolution version of the signal is created that
+retains the most prominent features or important elements but removes some fine details.
+In convolutional neural networks, pooling layers are used by applying a filter to a region of
+neighboring pixels (see the following figure). In earlier implementations, the average of all
+pixel values was typically used (see, e.g., LeCun et al. (1990). However, it was found that
+using the maximum value within each region was more effective and led to higher performance
+of the resulting convolutional neural networks (Scherer et al., 2010).
+37
+Figure 17: MaxPool: A Pooling Filter is Applied to the Image and the Maximum Value in
+Each Region is Used to Downsample the Image
+Source: Kerzel (2020).
+Adding such a pooling layer has the advantage that the down-sampled image contains a
+“summary” of the features extracted by a convolutional network layer that is more robust
+to small changes in the image. However, while this approach does make the convolutional
+layer more robust, it also means that it is no longer invariant with respect to translations
+or rotations of the image. The approach developed by Zhang (2019) aims at restoring
+translation invariance.
+Convolutional Neural Networks
+We now have all the ingredients to build a convolutional neural network from the above
+building blocks. The input signal, such as an image, is presented to a convolutional layer
+which takes the kernel size, as well as the parameters for padding and stride, as input. As
+discussed, the convolutional layer learns a particular filter during network training, i.e., it
+extracts a specific set of features from the image. Typically, a rectification non-linearity is
+applied after the convolution layer in neural networks of the form +& = max 4&, 0 . This is
+done for two reasons: First, the convolution operator is a linear transformation. As in the
+case of the “normal” artificial neuron, adding a non-linear function makes subsequent
+applications of the convolution more powerful. If such a non-linearity was not added, two
+convolutions could be expressed as a single linear combination. Second, edges or other
+features learned by convolutional layers which go in opposite directions should not cancel
+each other out. In most cases, a pooling layer is then applied to downsample the features
+created by the convolutional network layer.
+In a deep convolutional neural network, several of these combinations of convolutional,
+non-linear, and pooling layers are stacked on top of each other. This repeated process
+allows the later convolutional neural network layers to extract further features from the
+image, building on the output of the earlier convolutional layers. For example, the earlier
+convolutional layers may learn lower-level features, such as edges, whereas later convolutional
+neural networks are able to learn higher-level, more abstract features.
+Typically, convolutional neural networks are used for classification tasks and assign the
+input signal, such as an image, to one or more output classes. For example, we may wish
+to separate images of dogs from images of cats. As the feed-forward networks discussed
+earlier are used for classification tasks, a fully-connected neural network is used in the
+final few layers of the network architecture. Hence, the convolutional network layers
+38
+extract the features from the input signal, and then the feed-forward network uses these
+features to assign the most probable class to the input. Instead of assigning the class
+directly, a softmax function is used in most cases. The softmax function 5 is defined as
+5 4& = 64&
+-) = 1
+1 64)
+for 1 classes. In the case of neural networks, the output 5 is interpreted as the probability
+that the input signal belongs to class &, normalized to all classes. Calculating this value for
+all possible classes & = 1, …,1, the class with the highest probability is assigned as the
+result of the classification. In many cases, an additional threshold is required which
+ensures the network is sufficiently “confident” that the output belongs to the class
+assigned, and some form of error message or “no assignment” is given if the threshold criterion
+is not met.
+Notable CNN Architectures
+One of the earliest versions of deep convolutional neural networks for image classification
+is LeNet-5 (LeCun et al., 1998), which identifies handwritten digits in the range 0—9. Now
+known as the Modified National Institute of Standards and Technology (MNIST) data set, it
+is a popular small data set for practicing the handling of convolutional neural networks.
+LeNet-5 has a simple architecture (from a modern perspective). The input layer is followed
+by two convolutional layers (each followed by an average pooling layer), followed by a
+dense layer with 120 nodes, a dense layer of 84 nodes, and finally a dense output layer
+with ten nodes, one per digit that need to be classified.
+In later years, image processing network architectures were developed and compared in
+ImageNet challenges. The ImageNet Large Scale Visual Recognition Challenge aims to
+make the performance of various image-processing neural networks comparable by providing
+a large benchmark data set on which new algorithms can be tested and compared
+to the performance of existing ones (Russakovsky et al., 2015). A series of workshops and
+challenges between 2010 and 2017 focused on advancing the field of computer vision
+(Computer Vision Group, Technical University of Munich, n.d.). Compared to the MNIST
+data set, the images are much bigger than the 28 × 28 pixel-sized images of MNIST and
+consist of approximately 1,000 categories (instead of ten for the digits). The entire Image-
+Net data set contains more than 14 million images.
+In 2012, ImageNet (Krizhevksy et al., 2012), also called AlexNet after the first name of the
+first author of the paper, won the ImageNet challenge by a large margin. Conceptionally,
+the network is very similar to LeNet-5; however, it uses eight convolutional layers with
+max-pooling instead of average pooling, and the three dense layers at the end of the network
+are much bigger (4,096, 4,096, and 1,000 nodes) to accommodate the many categories
+in the ImageNet data set.
+In 2014, the ImageNet challenge was won by a new network developed by Google called
+GoogLeNet (Szegedy et al., 2015), based on the “network-in-network” (NiN) architecture
+(Lin et al., 2013). The idea behind the NiN approach is that convolutional layers are
+arranged in blocks, where a “normal” convolutional layer is followed by two 1×1 convo-
+39
+(2.7)
+lutional layers. These additional layers function as a fully-connected (dense) layer acting
+on each pixel location independently. In GoogLeNet, the convolutional layers are also
+arranged in inception blocks, where the input to each block is split into different paths,
+each consisting of different convolutional layers, some of which are followed by pooling
+layers and others not. The output of these paths is then merged in a concatenation step.
+The full network architecture is given by a combination of conventional convolutional layers
+as well as a number of these inception blocks, followed by a dense layer for the final
+classification task. These architectures were refined in later years in Inception V3 (Szegedy
+et al., 2016) and Inception V4 (Szegedy et al., 2017).
+In 2015, the ImageNet challenge was won by researchers from Microsoft using residual
+networks or ResNet (He et al., 2016). The main idea of this approach is motivated by the
+fact that (at least in principle) networks should be able to approximate any function. In
+residual networks, an identity “short-cut” is placed skipping one or more layers (see following
+figure).
+Figure 18: Idea of the Residual Block in ResNet
+Source: Kerzel (2020).
+This means that the residual block between these direct connections only needs to learn
+the deviations from the identity rather than the full function. The full ResNet architecture
+that won the ImageNet challenge is a complex arrangement of many convolutional layers
+arranged in residual blocks with identity connections between them. The final layer is a
+dense layer with 1,000 output nodes to accommodate the different classes in the challenge.
+40
+2.3 Recurrent Neural Networks, Memory
+Cells, and LSTMs
+In the feed-forward and convolutional neural networks discussed so far, information
+flowed in one direction, from the input layer to the output layer. Each of the layers may be
+quite complicated or complex; however, fundamentally, each neuron accepts input from
+the previous layer, performs some computation, and passes it on to one or more neurons
+in the next layer.
+Recurrent neural networks (RNN) extend this approach and allow connections not only to
+the next layer but also to previous layers, the current layer, or even onto the neurons
+themselves (see the following figure). This allows RNNs to develop a memory that can, for
+example, be used for language generation (Martens & Sutskever, 2011). They can even
+learn how simple computer programs work by learning the characters of the code and
+associating this with the desired output, hence, learning what the code does (Zaremba &
+Sutskever, 2014).
+Figure 19: Overview of Recurrent Neural Networks
+Source: Kerzel (2020).
+Recurrent Neurons
+So far, we have considered neurons that take an input and compute an output (as shown
+in the left part of the following figure). Mathematically, we can express this as
+/) " = . $ + -&#&)"&
+= . $ + " · #
+41
+where " is the input to the neuron, /) the output of neuron ), $ the bias node, . · the
+transfer function, and #&) the weights connecting the neuron to other neurons. To aid the
+discussion of how to develop recurrent neurons, we will use a simplified representation of
+this neuron (as shown in the right part of the following figure). The summation sign 5
+represents the processing of the input, and the piece-wise linear function represents a
+popular choice of the activation or transfer function . · .
+Figure 20: Artificial Neuron: Simplified View
+Source: Kerzel (2020).
+In order to make this neuron recurrent, we allow for the output of the neuron being sent
+back to previous layers or itself. In this example, we sent the output of the neuron back
+onto itself (see following figure).
+Figure 21: Recurrent Neuron
+Source: Kerzel (2020).
+This means that the output of the neuron now depends on both the previous inputs to the
+neuron and the output it has calculated, i.e., the output of the neuron becomes time
+dependent. In the first step, the output of the recurrent neuron is the same as for a normal,
+non-recurrent neuron. The neuron receives the input but as this is the first step, no
+previous output has been calculated; hence, the output is the same as for the non-recur-
+42
+rent neuron: /) = . $ + -&#&)"& . However, in the next step, the output of the neuron
+depends both on the next input " and the output of the neuron at the previous step.
+Hence, at some time (or step) %, the output depends on both the input and the previous
+outputs at % − 1,% − 2, . . . ,% − 3, assuming no previous output (represented by
+/% = 0 = 0) at time % = 0 in the first step. Each recurrent neuron has two sets of weights.
+One set of weights is used for the inputs " , and the other set is used for the outputs of the
+previous time steps. Mathematically, the output of the neuron is then given by
+/) % = . " · # " + /) % − 1 #/ + $
+where /) % is the output of the recurrent neuron we wish to evaluate at time %, " is the
+vector of input values to the neuron, # " is the set of weights used for the inputs, /) % − 1
+is the output of the neuron at the previous time-step % − 1, # / is the set of weights used
+for the previous output of the neuron, and $ represents the bias node. Instead of sending
+the output back to a single neuron, we can send the output back to a group of neurons or
+even a whole network layer of recurrent neurons (see following figure).
+Figure 22: Recurrent Network Layer
+Source: Kerzel (2020).
+In this case, equation 2.8 becomes
+768/ % = . " · # " + / % − 1 · # / + $
+Memory Cells
+In the simple recurrent neuron or layer of recurrent neurons, we sent the output computed
+by the neuron(s) back as additional input. However, we can make the recurrent neuron
+more powerful by extending this approach and including a hidden state into the loop,
+sending the output back and creating a memory cell. This hidden state is characterized by
+some function # % , which depends on the previous inputs, earlier outputs of the neuron,
+and the hidden state at earlier steps. In the simplest form, the hidden state just sends the
+output back and becomes the standard recurrent neuron. There are many ways to define
+43
+(2.8)
+(2.9)
+the function for the hidden state, and the exact setup depends on which task the neuron
+should solve. In particular, such hidden states allow us to retain a long-term memory of
+inputs encountered at earlier time steps.
+Figure 23: Recurrent Neuron with Memory Cell
+Source: Kerzel (2020).
+LSTM and GRU
+One of the main challenges of using recurrent neural networks is learning long sequences,
+such as a very long sentence or a poem. For example, imagine you need to summarize or
+translate a very long sentence, but your memory is not long enough that you can remember
+the beginning of the sentence once you have reached its end. Learning such long
+sequences requires that we take more than one previous output into account, i.e., the output
+does not only depend on time steps % and % − 1, but also steps % − 2, % − 3, …, % − 3.
+This makes the training of RNNs very difficult and unstable.
+Figure 24: Sequence of Simple Memory Cells
+Source: Kerzel (2020).
+The hidden state can be used to extend the recurrent neurons into a memory cell. An
+example of a sequence of such memory cells is shown in the figure above, where the internal
+state of the cell is represented by a simple function such as tanh " . By creating a
+sophisticated hidden state, the RNN can perform much better. The general idea is to create
+44
+a memory structure (M) and decide during the training process which parts of the previously-
+seen input data should be remembered and which parts of the memory should be
+forgotten, as they are no longer relevant. This then forms a candidate for the new memory
+(M'). Additionally, it needs to be decided which part of the new information should be
+added to the memory. We can express this as
+M % = remember % *M % − 1 + add % * M' % .
+The so-called Long Short-Term Memory (or LSTM) cell has proven particularly successful in
+retaining the memory of long sequences efficiently. LSTMs were originally proposed by
+Hochreiter and Schmidhuber (1997) and improved over the years by many researchers, for
+example, Sak et al. (2014) and Zaremba et al. (2014).
+Figure 25: LSTM Cell
+Source: Kerzel (2020).
+The LSTM cell is quite complicated (see the previous figure). Compared to the simple
+recurrent cell, the hidden state is split into two functions: 8 % and # % . We can interpret
+8 % as the long-term hidden state and # % as the short-term hidden state. The general
+idea is that the network can learn what to store in the long-term state, which information
+to access from the long-term state, and which information should be removed from it. This
+is done via a series of gates. Starting with the long-term memory 8 % , it first transverses a
+forget gate where it is decided which information is removed from the memory. It then
+passes an addition operation where new memories, decided by the input gate, are added
+to the long-term memory. After these two operations, the long-term memory 8 % is successfully
+modified and passed on to the next step. After the addition operation, the long-
+45
+term memory is copied and passed through a tanh · function, and the resulting output
+is passed through an output gate. This results in a new short-term memory # % , which is
+equal to the output / % of the LSTM cell at time %.
+The key to the operation of the LSTM cell is how new memories are formed. Both the previous
+short-term memory # % − 1 , as well as the new input vector " % , are sent to four
+separate feed-forward (or fully-connected) neural networks. The output equations for
+these networks are
+! % =5 # "! · " % + # #! · # % − 1 + $!
+9 % =tanh # "9 · " % + # #9 · # % − 1 + $9
+& % =5 # "& · " % + # #& · # % − 1 + $&
+) % =5 # ") · " % + # #) · # % − 1 + $)
+where # "!,# "9,# "&# ") are the weights connecting the network layers to the input " ;
+# #!,# #9,# #&# #) are the weights connecting the network layers to the previous shortterm
+memory # % − 1 ; and $!, $9, $&, $) are the bias terms for the four networks. The network
+described by 9 % has a tanh · activation function, while the other three networks
+have a logistic activation function with outputs in 0, 1 . The main network inside the
+LSTM cell is 9 % with the tanh · activation function. This network acts as the “normal”
+hidden state found in basic memory cells (see the middle cell in the figure “Sequence of
+Simple Memory Cells”). It processes both the input " and the hidden state # % − 1 . In a
+basic memory cell, this network alone would determine the output / % and new hidden
+state # % ; however, in an LSTM cell, this is modified by the three other networks ! % , & % ,
+and ) % . These act as gate controllers, and during network training they learn how to
+modify the memory of the LSTM cell. The network ! % controls the forget gate and learns
+which information should be erased from the long-term memory 8 % . The network & %
+controls the input gate and learns which information from the network 9 % should be
+added to the long-term memory. The network ) % controls the output gate and learns
+which information from the long-term memory 8 % should be accessed and added to the
+short-term memory # % and the output / % .
+The Gated Recurrent Unit (GRU), shown in the following figure, is similar to the LSTM cell
+but much simpler (Cho et al., 2014b).
+46
+Figure 26: Gated Recurrent Unit
+Source: Kerzel (2020).
+Instead of two hidden states, there is only one (# % ). The forget and input gates are controlled
+by a single network 4 % , and there is no output gate; the complete hidden state is
+sent as output at each step. However, a new controller (' % ) decides which part of the previous
+hidden state # % − 1 will be sent to the main network 9 % , which again has a
+tanh · activation function. For further details about the setup of LSTM and GRU, see
+Géron (2019). In a recent study, Greff et al. (2015) show that modifications to the origial
+LSTM setup, such as the GRU, demonstrate similar performance while reducing the complexity
+and number of parameters that need to be trained, which is beneficial from a practical
+point of view.
+SUMMARY
+This unit discusses the most prevalent types of neural networks. Fullyconnected
+or dense networks are typically used for classification or
+regression tasks. Convolutional neural networks are mainly used for
+image analysis. Inspired by the filters in traditional image anlaysis, convolutional
+networks learn to extract features from images or other data
+that can be used to, e.g., classify what is shown in the image. Recurrent
+neural networks include a feedback loop where the output of the neurons
+is used as another input to the same neuron again. This allows the
+47
+use of neural networks in complex tasks that show a time-dependent
+structure, such as time-series forecasting or natural language processing.
+48
